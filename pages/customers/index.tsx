@@ -10,6 +10,8 @@ import { useQuery } from "@tanstack/react-query";
 //import { Button } from "@mui/material";
 
 import Customer from "@/components/Customer";
+import Grid from "@mui/material/Grid";
+import Container from "@mui/material/Container";
 
 export type Customer = {
     _id?: ObjectId,
@@ -46,14 +48,15 @@ const Customers: NextPage = ({ c }: InferGetStaticPropsType<typeof getStaticProp
     })
     if (customers){
     return ( 
-    <>
-     <h1>Customers</h1>
+    <Container>
+    <Grid container spacing={5} sx={{ mt: 1 }}>
      {customers.map((customer: Customer) =>{
         return (
-            <Customer customer={customer} />
+            <Customer key={customer._id?.toString()} customer={customer} />
         )
      })}
-     </>
+     </Grid>
+     </Container>
     )
     }
     return null

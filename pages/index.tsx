@@ -1,5 +1,5 @@
 
-import Dashboard from '@/components/Dashboard';
+import Dashboard from '@/components/Theme';
 import type { NextPage } from 'next'
 import * as React from 'react'
 import Chart from '@/components/Chart';

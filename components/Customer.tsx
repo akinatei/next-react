@@ -3,10 +3,11 @@ import Info from "@mui/icons-material/Info";
 import PersonIcon from '@mui/icons-material/Person'
 import Tooltip from '@mui/material/Tooltip'
 import { Customer } from "@/pages/customers";
+import Grid from "@mui/material/Grid";
 
 const Customer = ({customer}: { customer: Customer }) => {
     return (
-        <div key={customer._id?.toString()} style={{ marginBottom: 40 }}>
+        <Grid item>
         <span style={{
             display: 'flex',
             alignItems: 'center',
@@ -20,7 +21,7 @@ const Customer = ({customer}: { customer: Customer }) => {
         <p>{customer.industry}</p>
         <Button variant="contained">View Orders</Button>
         <Info />
-    </div>
+    </Grid>
     )
 }
 
