@@ -1,36 +1,31 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import Container from '@mui/material/Container';
+import { GetStaticProps, NextPage } from 'next/types';
+import { getCustomers } from '../api/customers';
 
 const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 90 },
+  // { field: 'id', headerName: 'ID', width: 90 },
   {
-    field: 'firstName',
-    headerName: 'First name',
+    field: 'customer',
+    headerName: 'Customer',
     width: 150,
     editable: true,
   },
   {
-    field: 'lastName',
-    headerName: 'Last name',
-    width: 150,
+    field: 'description',
+    headerName: 'Description',
+    type: 'string',
+    width: 400,
     editable: true,
   },
   {
-    field: 'age',
-    headerName: 'Age',
+    field: 'price',
+    headerName: 'Price',
     type: 'number',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
+    sortable: true,
     width: 160,
-    valueGetter: (params: GridValueGetterParams) =>
-      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
   },
 ];
 
@@ -46,11 +41,45 @@ const rows = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
-export default function DataGridDemo() {
+export const getStaticProps: GetStaticProps = async() => {
+  const data = await getCustomers()
+
+  let orders: any = []
+
+  data.forEach((customer) => {
+    if(customer.orders) {
+      customer.orders.forEach((order) => {
+        //console.log(order)
+        orders.push({ ...order, 
+          customer: customer.name, 
+          id: order._id, 
+          price: Number(order.price.$numberDecimal),
+        })
+      });
+    }
+  });
+ 
+  return {
+    props: {
+      orders: orders,
+      // orders: data
+      // .map((customer) => {
+      //   return customer.orders || null;
+      // }).flat(1).filter((order) => {
+      //   return order !== null
+      // }),
+    },
+    revalidate: 60,
+  }
+}
+
+const Orders: NextPage = (props: any) => {
+  console.log(props)
   return (
+    <Container>
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
-        rows={rows}
+        rows={props.orders}
         columns={columns}
         initialState={{
           pagination: {
@@ -64,5 +93,8 @@ export default function DataGridDemo() {
         disableRowSelectionOnClick
       />
     </Box>
+    </Container>
   );
 }
+
+export default Orders;
