@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "@/lib/mongodb";
-import { Customer } from "@/pages/customers";
+import { Customer, Order } from "@/pages/customers";
 import { ObjectId } from "mongodb";
 import NextCors from 'nextjs-cors'
 
@@ -43,12 +43,15 @@ export default async (req: NextApiRequest, res: NextApiResponse<Return | ObjectI
         const data = await getCustomers()
         res.status(200).json({customers: data})
     } else if (req.method === 'POST') {
-        console.log(req.body)
+        // console.log(req.body)
         
         if(req.body.name && req.body.industry){
             const customer: Customer = {
                 name: req.body.name,
-                industry: req.body.industry
+                industry: req.body.industry,
+                orders: req.body.orders.map((order: Order) => {
+                    return { ...order, _id: new ObjectId() }
+                })
             }
             const insertedId = await addCustomer(customer)
             res.revalidate('/customers')
