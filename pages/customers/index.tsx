@@ -9,7 +9,8 @@ import { useQuery } from "@tanstack/react-query";
 // six times slower
 //import { Button } from "@mui/material";
 
-import Customer from "@/components/Customer";
+//import Customer from "@/components/Customer";
+import CustomerComponent from '../../components/Customer';
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 
@@ -59,7 +60,7 @@ const Customers: NextPage = ({ c }: InferGetStaticPropsType<typeof getStaticProp
     <Grid container spacing={5} sx={{ mt: 1 }}>
      {customers.map((customer: Customer) =>{
         return (
-            <Customer key={customer._id?.toString()} customer={customer} />
+            <CustomerComponent key={customer._id?.toString()} customer={customer} />
         )
      })}
      </Grid>
